@@ -1,13 +1,27 @@
 import numpy as np
 
+
+class NN:
+    """
+    Represents a neural network consisting of
+    multiple layers.
+    """
+    
+    def __init__(self, layers):
+        self.layers = list(layers)
+        
+
 class Layer:
-    """Represents a single layer in a fully-connected
+    """
+    Represents a single layer in a fully-connected
     Feed-Forward neural network. 
     
     A single layer is represented by its weight matrix 
-    which has the shape (ninputs, noutputs)"""
+    which has the shape (ninputs, noutputs)
+    """
     
     def __init__(self, ninputs, noutputs):
+        # glorot uniform
         boundary = np.sqrt(6 / (ninputs + noutputs))
         self.weights = np.random.uniform(-boundary, boundary, (ninputs, noutputs))
         
