@@ -14,6 +14,14 @@ class NN:
         '''
         Forward an input X through the network
         by forwarding it through each layer.
+        
+        Parameters
+        ----------
+        X: nd-array - The input to the network. (nsamples x nfeatures)
+        
+        Returns
+        -------
+        Yhat: nd-array - The output of the network. (nsamples x nclasses)
         '''
         # we save the intermediate values we 
         # need for backpropagation later in
@@ -30,6 +38,51 @@ class NN:
         Yhat = softmax(Z)
         self.grads.append(Yhat)
         return Yhat
+    
+    def backward(self, Y):
+        """
+        Perform backpropagation through the network.
+        
+        This function expects to be called only after an 
+        input has been forwarded.
+        
+        Parameters
+        ----------
+        Y: numpy nd-array - The true output labels for the current batch.
+        
+        Returns
+        -------
+        grads: A list of the gradient matrices. 
+            1 for each layer: [dJ/dW1, dJ/dW2, ...].
+        """
+        gradients = []
+        
+        Yhat = self.grads.pop()
+        # we reverse the gradients list that we 
+        # built in the forward method because we 
+        # need those elements in reverse order for backprop.
+        self.grads.reverse()
+        
+        δ = Yhat - Y
+        for X, Z, layer in zip(self.grads[::2], self.grads[1::2], self.layers[::-1]):
+            W = layer.weights
+            
+            dW = X.T @ δ
+            gradients.append(dW)
+            
+            δ = (δ @ W.T) * dReLU(Z)
+            
+        X = self.layers[0]
+        dW = X.T @ δ
+        gradients.append(dW)
+        
+        assert len(gradients) == len(self.layers), (len(gradients), len(self.layers))
+        
+        for dW, W in zip(gradients, self.layers[::-1]):
+            assert dW.shape == W.weights.shape, (dW.shape, W.weights.shape)
+        
+        return gradients[::-1]
+        
     
     def predict(self, X):
         probs = self.forward(X)
@@ -68,6 +121,10 @@ class Layer:
 def ReLU(X):
     '''ReLU(X) = X if X > 0 else 0'''
     return np.maximum(X, 0)
+
+def dReLU(X):
+    """ReLU'(X) = 1 if X > 0 else 0"""
+    return (X > 0).astype(float)
 
 def softmax(X):
     exp = np.exp(X - X.max(axis=1, keepdims=True))
