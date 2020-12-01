@@ -104,13 +104,17 @@ class Layer:
     which has the shape (ninputs, noutputs)
     """
     
-    def __init__(self, ninputs, noutputs):
+    def __init__(self, ninputs, noutputs, activation=None):
         # glorot uniform
         boundary = np.sqrt(6 / (ninputs + noutputs))
         self.weights = np.random.uniform(-boundary, boundary, (ninputs, noutputs))
+        self.activation = activation
+        self.grads = {}
         
     def forward(self, X):
         X = np.atleast_2d(X)
+        self.grads['X'] = X
+        self.grads['W'] = self.weights
         return X @ self.weights
     
     def __str__(self):
@@ -125,6 +129,13 @@ def ReLU(X):
 def dReLU(X):
     """ReLU'(X) = 1 if X > 0 else 0"""
     return (X > 0).astype(float)
+
+def sigmoid(X):
+    return 1 / (1 + np.exp(-X))
+
+def dsigmoid(X):
+    sig_X = sigmoid(X)
+    return sig_X * (1 - sig_X)
 
 def softmax(X):
     exp = np.exp(X - X.max(axis=1, keepdims=True))
