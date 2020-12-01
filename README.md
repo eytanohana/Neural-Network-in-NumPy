@@ -2,37 +2,7 @@
 
 This is an in depth explanation and implementation of a simple feed-forward neural net using NumPy.
 
-## Feed-Forward Neural Network
-
-Note: This notebook already assumes a basic knowledge of neural nets. Things like layers and layer sizes, activation functions, batching, and so on.
-
-By the end of the notebook we are going to create a simple feed-forward neural net that learns to recognize handwritten digits using the [MNIST-dataset](http://yann.lecun.com/exdb/mnist/).
-
-We'll first start by training a simple neural network to learn to classify XOR ($\oplus$):
-
-<table>
-    <thead><tr><td>a</td><td>b</td><td>$a \oplus b$</td></tr></thead>
-    <tbody>
-        <tr><td>0</td><td>0</td><td>0</td></tr>
-        <tr><td>0</td><td>1</td><td>1</td></tr>
-        <tr><td>1</td><td>0</td><td>1</td></tr>
-        <tr><td>1</td><td>1</td><td>0</td></tr>
-    </tbody>
-</table>
-
----
-
-We'll start by defining the structure of our network:
-<div style="text-align: center;">
-    <img src="static/2-3-1-nn.png" width="60%">
-</div>
-
-- The first layer (aka the input layer) has two inputs corresponding to $a$ and $b$.
-- The middle / hidden layer is composed of three neurons.
-- The final layer (aka the output layer) has a single output. 
-
-The output of the neural network is a prediction that is the probability of the instance to belong to the positive class.
-So anything above 0.5 we could classify as 1 and everthing below 0.5 we could classify as 0.
+Note: This repo already assumes a basic knowledge of neural nets. Things like layers and layer sizes, weights, activation functions, batching, and so on. It's more of an in depth look at backpropagation.
 
 ## Feed-Forward
 
